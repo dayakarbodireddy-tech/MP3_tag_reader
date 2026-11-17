@@ -1,21 +1,25 @@
-#include "mp3_header.h"
+#ifndef MP3_HEADER_H
+#define MP3_HEADER_H
 
-int main(int argc, char *argv[])
+#include <stdio.h>
+#include <string.h>
+
+#define VIEW 	1
+#define EDIT 	2
+
+
+struct MP3
 {
-    /* structure variable declaration */
-    struct MP3 mp3;
+    char *mp3_filename;
+    FILE *org_mp3_fptr;
+    FILE *dup_mp3_fptr;
+};
 
-//    int ret = validate_cla(argc,argv,&mp3);
-    if(ret == VIEW)
-    {
-	view(&mp3);
+int validate_cla(int argc, char *argv[], struct MP3 *mp3);
+void view(struct MP3 *mp3);
+void edit(struct MP3 *mp3);
+void toggle_endianess(struct MP3 *mp3, int *size);
+void print_tag_data(FILE * org_mp3_fptr);
+void tag_to_name(char *);
 
-    }
-    else if(ret == EDIT)
-    {
-
-    }
-
-    return 0;
-
-}
+#endif
