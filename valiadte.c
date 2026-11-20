@@ -22,8 +22,10 @@ int validate_cla(int argc, char *argv[], struct MP3 *mp3)
 	printf("\t\t2.2. -a -> to edit artist name\n");
 	printf("\t\t2.3. -A -> to edit album name\n");
 	printf("\t\t2.4. -y -> to edit year\n");
-	printf("\t\t2.5. -m -> to edit content\n");
-	printf("\t\t2.6. -c -> to edit comment\n");
+	printf("\t\t2.5. -m -> to edit genre\n");
+	printf("\t\t2.6. -c -> to edit composer\n");
+	
+	
 	printf("------------------------------------------------------------------------------\n");
 	return 0; 
     }
@@ -51,7 +53,33 @@ int validate_cla(int argc, char *argv[], struct MP3 *mp3)
     if(!strcmp(argv[1], "-e"))
     {
 	// Do the necessary validation
-
+        if(argc!=5)
+		{
+			printf("ERROR :./a.out : INVALID ARGUMENTS\n ");
+			return 0;
+		}
+		if(strcmp(argv[2],"-t")==0||
+	       strcmp(argv[2],"-a")==0||
+	       strcmp(argv[2],"-A")==0||
+	       strcmp(argv[2],"-y")==0||
+	       strcmp(argv[2],"-m")==0||
+	       strcmp(argv[2],"-c")==0)
+		   {
+			printf("Valid editing option\n");
+		   }else{
+			printf("Invalid editing option\n");
+			return 0;
+		   }
+		   mp3->edit_option=argv[2];
+		   mp3->new_tag_value=argv[3];
+		   int len=strlen(argv[4]);
+		   if(len>=4 && strcmp(argv[4]+len - 4,".mp3")==0)
+		   {
+			 mp3->mp3_filename=argv[4];
+		   }else{
+			printf("ERROR : passed the wrong song File\n");
+			return 0;
+		   }
 	return EDIT;
     }
  printf("ERROR : Unsupported operation type\n");

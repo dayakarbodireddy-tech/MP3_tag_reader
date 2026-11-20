@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     }
     else if(ret == EDIT)
     {
-
+       edit(&mp3);
     }
 
     return 0;

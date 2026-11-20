@@ -39,8 +39,11 @@ void view(struct MP3 *mp3)
             ((header_buffer[4] & 0x7F)<<14)|
             ((header_buffer[5] & 0x7F)<<7)|
             ((header_buffer[6] & 0x7F));
-   printf("Tag size is : %u\n",tag_size);
-
+printf("Tag size is : %u\n",tag_size);
+printf("\n");
+unsigned int bytes_read=0;
+while(bytes_read<tag_size)
+{
    char frame_id[5];
    if(fread(frame_id,sizeof(char),4,mp3->org_mp3_fptr)!=4)
    {
@@ -48,10 +51,8 @@ void view(struct MP3 *mp3)
     return;
    }
    frame_id[4]='\0';
-   if(strcmp(frame_id,"TIT2")==0)
-   {
-    printf("Song/Title\n");
-   }
+   printf("Frame ID : %s\n",frame_id);
+   
    unsigned char frame_size[4];//but these 4 bytes are stored in big-endian format in ID3v2.3.
    if(fread(frame_size,sizeof(char),4,mp3->org_mp3_fptr)!=4)
    {
@@ -63,7 +64,7 @@ void view(struct MP3 *mp3)
                    (((unsigned int)frame_size[1])<<16)|
                    (((unsigned int)frame_size[2])<<8)|
                    (((unsigned int)frame_size[3]));
-   printf("Frame size of the particular frame id is %u\n",frame_data_size);
+   printf("Frame_size for particular frame id is %u\n",frame_data_size);
    unsigned char flag_buffer[2];
     if(fread(flag_buffer,sizeof(char),2,mp3->org_mp3_fptr)!=2)
     {
@@ -78,8 +79,35 @@ void view(struct MP3 *mp3)
        return;
     }
     frame_data[frame_data_size]='\0';
-    printf("Encoding byte: %d\n", (unsigned char)frame_data[0]);
-    printf("title is %s\n",&frame_data[1]);  
+    //printf("Encoding byte: %d\n", (unsigned char)frame_data[0]);
+    if(strcmp(frame_id,"TIT2")==0)
+   {
+    printf("Title is %s\n",&frame_data[1]);
+   }
+   else if((strcmp(frame_id,"TPE1")==0))
+   {
+    printf("Artist Name : %s\n",&frame_data[1]);
+   }
+   else if((strcmp(frame_id,"TALB")==0))
+   {
+    printf("ALBUM : %s\n",&frame_data[1]);
+   }
+   else if((strcmp(frame_id,"TYER")==0))
+   {
+    printf("YEAR : %s\n",&frame_data[1]);
+   }
+   else if((strcmp(frame_id,"TCON")==0))
+   {
+    printf("GENRE : %s\n",&frame_data[1]);
+   } 
+   else if((strcmp(frame_id,"TCOM")==0))
+   {
+    printf("COMPOSER : %s\n",&frame_data[1]);
+   }
+   printf("\n");
+    
+    bytes_read=bytes_read+10+frame_data_size;
+}  
 
 }
 

@@ -13,6 +13,8 @@ struct MP3
     char *mp3_filename;
     FILE *org_mp3_fptr;
     FILE *dup_mp3_fptr;
+    char *edit_option;
+    char *new_tag_value;
 };
 
 int validate_cla(int argc, char *argv[], struct MP3 *mp3);
